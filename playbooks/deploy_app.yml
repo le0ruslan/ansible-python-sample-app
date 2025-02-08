@@ -1,0 +1,9 @@
+---
+- name: Deploy App
+  hosts: server1
+  become: true
+  vars_files:
+    - "{{ inventory_dir }}/play_vars/vars_deploy_app.yml"
+    - "{{ inventory_dir }}/play_vars/vars_setup_python.yml"
+  roles:
+    - role: deploy_app

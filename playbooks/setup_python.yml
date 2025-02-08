@@ -1,0 +1,8 @@
+---
+- name: Setup Python, Python packages
+  hosts: server1
+  become: true
+  vars_files:
+    - "{{ inventory_dir }}/play_vars/vars_setup_python.yml"
+  roles:
+    - role: setup_python

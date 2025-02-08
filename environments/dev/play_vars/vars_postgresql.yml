@@ -1,0 +1,43 @@
+---
+#ANSX posgresql role vars:
+postgresql_version: 12
+
+postgresql_max_connections: 200
+postgresql_shared_buffers: 256MB
+postgresql_effective_cache_size: 768MB
+postgresql_maintenance_work_mem: 64MB
+postgresql_checkpoint_completion_target: 0.9
+postgresql_wal_buffers: 7864kB
+postgresql_default_statistics_target: 100
+postgresql_random_page_cost: 1.1
+postgresql_effective_io_concurrency: 200
+postgresql_work_mem: 655kB
+postgresql_huge_pages: off
+postgresql_min_wal_size: 1GB
+postgresql_max_wal_size: 4GB
+postgresql_max_worker_processes: 2
+postgresql_max_parallel_workers_per_gather: 1
+postgresql_max_parallel_workers: 2
+
+postgresql_listen_addresses: '*'
+postgresql_port: 5432
+postgresql_pg_hba_md5_hosts:
+- "192.168.56.0/24"
+
+postgresql_databases:
+  - name: app
+    owner: worker
+
+postgresql_users:
+  - name: worker
+    pass: worker
+
+postgresql_user_privileges:
+  - name: worker
+    db: app
+    priv: "ALL"
+
+postgresql_apt_dependencies: python3-psycopg2
+postgresql_install_owner: postgres
+postgresql_install_group: postgres
+postgresql_install_mode: "0644"

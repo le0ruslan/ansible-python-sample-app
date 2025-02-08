@@ -1,0 +1,8 @@
+---
+- name: Install and Configure PostgreSQL
+  hosts: server1
+  become: true
+  vars_files:
+    - "{{ inventory_dir }}/play_vars/vars_postgresql.yml"
+  roles:
+    - role: ANXS.postgresql

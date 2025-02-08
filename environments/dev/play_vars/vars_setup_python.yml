@@ -1,0 +1,12 @@
+---
+setup_python_deadsnakes: "ppa:deadsnakes/ppa"
+setup_python_version: "python3.8"
+
+setup_python_list:
+  - curl
+  - "{{ setup_python_version }}-distutils"
+  - "{{ setup_python_version }}-venv"
+  - build-essential
+  - libpq-dev
+  - python3-psycopg2
+  - acl

@@ -1,0 +1,44 @@
+---
+- name: Set Flask environment variable
+  ansible.builtin.shell: >
+    echo "export FLASK_APP={{ deploy_app_flask_file }}" >>
+    /etc/profile.d/flask.sh
+
+- name: Set DB environment variable
+  ansible.builtin.shell: >
+    echo "export POSTGRESQL_URL={{ deploy_app_postgresql_url }}" >>
+    /etc/profile.d/flask.sh
+
+- name: Clone the python-sample-app repository
+  ansible.builtin.git:
+    repo: "{{ deploy_app_repo }}"
+    dest: "{{ deploy_app_dir }}"
+    version: "{{ deploy_app_branch }}"
+
+- name: Install Python dependencies
+  ansible.builtin.command: 
+    cmd: "{{ setup_python_version }} -m pip install -r {{ deploy_app_dir }}/requirements.txt"
+
+- name: Migrate database
+  ansible.builtin.command: flask db upgrade
+  args:
+    chdir: "{{ deploy_app_dir }}"
+
+- name: Create systemd service file
+  ansible.builtin.blockinfile:
+    path: "{{ deploy_app_service_path }}"
+    block: "{{ deploy_app_service_block }}"
+    create: yes
+    owner: "{{ deploy_app_service_user }}"
+    group: "{{ deploy_app_service_group }}"
+    mode: "{{ deploy_app_service_mode }}"
+
+- name: Reload systemd daemon
+  ansible.builtin.command: |
+    systemctl daemon-reload
+
+- name: Enable and start App service
+  ansible.builtin.service:
+    name: "{{ deploy_app_service_name }}"
+    enabled: true
+    state: started

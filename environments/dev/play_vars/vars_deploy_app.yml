@@ -1,0 +1,30 @@
+---
+deploy_app_repo: "https://github.com/mbaran0v/python-sample-app.git"
+deploy_app_dir: "/opt/python-sample-app"
+deploy_app_branch: "master"
+
+deploy_app_flask_file: app.py
+deploy_app_postgresql_url: postgresql://worker:worker@localhost/app
+
+deploy_app_service_user: vagrant
+deploy_app_service_group: vagrant
+deploy_app_service_path: /etc/systemd/system/python-sample-app.service
+deploy_app_service_block: |
+  [Unit]
+  Description=Python Sample App
+  After=network.target
+
+  [Service]
+  User={{ deploy_app_service_user }}
+  Group={{ deploy_app_service_group }}
+  WorkingDirectory={{ deploy_app_dir }}
+  ExecStart=/usr/bin/{{ setup_python_version }} {{ deploy_app_flask_file }}
+  Restart=always
+  Environment=FLASK_ENV=production
+  Environment=FLASK_DEBUG=0
+
+  [Install]
+  WantedBy=multi-user.target
+
+deploy_app_service_mode: '0644'
+deploy_app_service_name: python-sample-app

@@ -1,0 +1,28 @@
+---
+- name: Add deadsnakes PPA repository
+  ansible.builtin.apt_repository:
+    repo: "{{ setup_python_deadsnakes }}"
+    state: present
+
+- name: Update apt package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install {{ setup_python_version }}
+  ansible.builtin.apt:
+    name: "{{ setup_python_version }}-dev"
+    state: present
+
+- name: Install required packages for Python
+  ansible.builtin.apt:
+    name: "{{ setup_python_list }}"
+    state: present
+
+- name: Install pip for {{ setup_python_version }}
+  ansible.builtin.shell: |
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    {{ setup_python_version }} get-pip.py
+
+- name: Upgrade pip for {{ setup_python_version }}
+  ansible.builtin.command:
+    cmd: "{{ setup_python_version }} -m pip install --upgrade pip"
