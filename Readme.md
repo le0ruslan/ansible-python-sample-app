@@ -76,8 +76,3 @@ This repository implements the deployment of the application [devops-sample-djan
    ```shell
    curl -i -X GET http://192.168.56.11:5000/api/user
    ```
-
-## Notes
-
-- Additional tasks were not completed.
-
